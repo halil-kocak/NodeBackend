@@ -15,3 +15,27 @@ const bcrypt = require('bcrypt');
 // init Application
 const app = express();
 
+// Middleware
+app.engine('hbs', handlebar({ extname: '.hbs'}));
+app.set('view engine', 'hbs');
+// creating public dir
+app.use(express.static(path.join(__dirname+ '/public')));
+app.use(session({
+    secret: 'env.secret2022',
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+
+// Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function (user, done){
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done){
+    // user modul setup
+});
